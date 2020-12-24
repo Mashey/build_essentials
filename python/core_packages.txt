@@ -1,0 +1,11 @@
+autopep8
+coverage
+pylint
+pytest
+pytest-cov
+pytest-vcr
+python-dotenv
+requests
+singer-python
+vcrpy
+pandas
