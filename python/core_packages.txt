@@ -3,9 +3,11 @@ coverage
 pylint
 pytest
 pytest-cov
+pytest-mock
 pytest-vcr
 python-dotenv
 requests
 singer-python
+singer-tools
 vcrpy
 pandas
