@@ -1,5 +1,6 @@
 autopep8
 coverage
+coveralls
 pylint
 pytest
 pytest-cov
@@ -10,4 +11,3 @@ requests
 singer-python
 singer-tools
 vcrpy
-pandas
