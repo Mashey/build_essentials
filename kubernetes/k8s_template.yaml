@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <client-name>-production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <client-name>
+  template:
+    metadata:
+      labels:
+        app: <client-name>
+    spec:
+      containers:
+        # Client Name :: Meltano :: Container
+        - name: <client-name>
+          image: gcr.io/<gcp-project-id>/meltano-<client-name>:production
+          imagePullPolicy: Always
+          env:
+            # Environment Variables :: Client Name Container
+            - name: AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT
+              value: "120"
+            - name: AIRFLOW__CORE__EXECUTOR
+              value: "LocalExecutor"
+            # Service Account Environment Variables :: Client Name Container
+            - name: SERVICE_ACCOUNT_CREDENTIALS_PATH
+              value: /secrets/<service>/service_account.json
+
+            # Kubernetes Secrets :: Client Name Container
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: database
+            - name: MELTANO_DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: meltano
+                  key: db_connection
+            - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+              valueFrom:
+                secretKeyRef:
+                  name: airflow
+                  key: db_connection
+          
+          # Volume Mounts :: Client Name Container
+          volumeMounts:
+            - name: k8s-<service>
+              mountPath: /secrets/<service>
+              readOnly: true
+
+        # CloudSQL Proxy :: Container
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy
+          imagePullPolicy: Always
+          command:
+            - "/cloud_sql_proxy"
+
+            # Replace DB_PORT with the port the proxy should listen on
+            # Defaults: MySQL: 3306, Postgres: 5432, SQLServer: 1433
+            - "-instances=<gcp-project-id>:<cloudsql_zone>:<cloud-sql-instance>=tcp:5432"
+
+            # This flag specifies where the service account key can be found
+            - "-credential_file=/secrets/service_account.json"
+          securityContext:
+            runAsNonRoot: true
+
+          # Volume Mounts :: CloudSQL Proxy Container
+          volumeMounts:
+            - name: k8s-sql-volume
+              mountPath: /secrets/
+              readOnly: true
+      
+      # Volumes :: Pod
+      volumes:
+        - name: k8s-sql-volume
+          secret:
+            secretName: cloud-sql
+        - name: k8s-<service>
+          secret:
+            secretName: <service>
