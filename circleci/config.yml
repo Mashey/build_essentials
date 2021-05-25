@@ -6,17 +6,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps-{{ .Branch }}-{{ checksum "poetry.lock" }}
+            - deps-{{ checksum "poetry.lock" }}
       - python/install-packages:
           pkg-manager: poetry
       - save_cache:
-          key: deps-{{ .Branch }}-{{ checksum "poetry.lock" }}
+          key: deps-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
       - run:
           command: |
-            poetry run pytest
-          name: Run Tests
+            poetry run pytest --cov-report term-missing --cov=<package-name-here> tests/
+            poetry run coveralls
+          name: Run Tests and Upload Coverage
 orbs:
   python: circleci/python@1.4.0
 workflows:
