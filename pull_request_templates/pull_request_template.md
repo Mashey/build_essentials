@@ -8,8 +8,8 @@ Add an overview of the changes in this pull request.
 - [ ] Bug Fix
 - [ ] Refactor
 - [ ] Testing
-- [ ] Documentation
 - [ ] Dependency
+- [ ] Documentation
 - [ ] Breaking Change
 
 ## Dependencies
