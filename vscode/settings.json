@@ -1,9 +1,9 @@
 // Add the code below to the .vscode directory, which is in the project root
-// The packages `autopep8`, `pylint`, and `pytest` must be installed in the Poetry vitural env
+// The packages `black`, `pylint`, and `pytest` must be installed in the Poetry vitural env
 
 {
   "python.pythonPath": "/Users/<user>/Library/Caches/pypoetry/virtualenvs/<virtual_env>/bin/python",
   "python.linting.pylintEnabled": true,
   "python.testing.pytestEnabled": true,
-  "python.formatting.provider": "autopep8"
+  "python.formatting.provider": "black"
 }
