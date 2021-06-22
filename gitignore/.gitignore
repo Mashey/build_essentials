@@ -103,6 +103,8 @@ catalog.json
 state.json
 output
 sample_config.json
+test.json
+.mypy_cache
 
 rsa-key
 tags
