@@ -24,3 +24,4 @@ repos:
     rev: v2.8.3
     hooks:
     -   id: pylint
+        entry:  <path-to-virtual-env>/bin/pylint
