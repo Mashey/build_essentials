@@ -1,6 +1,7 @@
 linters:
   shellcheck:
     shell: bash
+  remarklint:
   flake8:
     python: 3
     config: ./.flake8
