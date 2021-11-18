@@ -1,0 +1,15 @@
+linters:
+  shellcheck:
+    shell: bash
+  remarklint:
+  flake8:
+    python: 3
+    config: ./.flake8
+    plugins:
+      - flake8-pytest
+  black:
+    fixer: true
+
+files:
+  ignore:
+    - ".github"
